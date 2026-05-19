@@ -9,25 +9,25 @@ import CloseEyeIcon from "@/assets/close-eye-icon.png";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, type LoginForm } from "@/schemas/auth";
+import { changePasswordSchema, type ChangePasswordForm } from "@/schemas/auth";
 
-export default function SignIn() {
-  const [showPassword, setShowPassword] = useState(false);
+export default function ChangePassword() {
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
-  } = useForm<LoginForm>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<ChangePasswordForm>({
+    resolver: zodResolver(changePasswordSchema),
     mode: "onBlur",
-    reValidateMode: "onChange",
-    defaultValues: { location: "sp", email: "", password: "" },
+    defaultValues: { currentPassword: "", newPassword: "" },
   });
 
-  const onSubmit = (data: LoginForm) => {
+  const onSubmit = (data: ChangePasswordForm) => {
     // dados válidos (envie para a API aqui)
-    console.log("Login válido:", data);
+    console.log("Senha alterada:", data);
   };
 
   return (
@@ -59,62 +59,27 @@ export default function SignIn() {
         </div>
 
         <div className="mt-10 max-w-md flex-1 min-h-0 overflow-y-auto">
-          <h1 className="text-3xl font-semibold mb-8">Faça seu login</h1>
+          <h1 className="text-3xl font-semibold mb-8">Altere sua senha</h1>
 
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-6"
           >
-            <label className="flex flex-col">
-              <span className="text-sm text-gray-600 mb-2">
-                Selecione sua localização
-              </span>
-              <select
-                {...register("location")}
-                className="border-b border-gray-300 py-2 bg-transparent"
-              >
-                <option value="sp">São Paulo</option>
-                <option value="rj">Rio de Janeiro</option>
-                <option value="mg">Minas Gerais</option>
-                <option value="pe">Pernambuco</option>
-              </select>
-              {errors.location && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.location.message}
-                </p>
-              )}
-            </label>
-
-            <label className="flex flex-col">
-              <span className="text-sm text-gray-600 mb-2">Email</span>
-              <input
-                type="email"
-                {...register("email")}
-                className="border-b border-gray-300 py-2 bg-transparent outline-none"
-                placeholder="seu@email.com"
-              />
-              {errors.email && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.email.message}
-                </p>
-              )}
-            </label>
-
             <label className="flex flex-col relative">
-              <span className="text-sm text-gray-600 mb-2">Senha</span>
+              <span className="text-sm text-gray-600 mb-2">Senha atual</span>
               <div className="flex items-center">
                 <input
-                  type={showPassword ? "text" : "password"}
-                  {...register("password")}
+                  type={showCurrentPassword ? "text" : "password"}
+                  {...register("currentPassword")}
                   className="flex-1 border-b border-gray-300 py-2 bg-transparent outline-none"
-                  placeholder="Senha"
+                  placeholder="Senha atual"
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword((v) => !v)}
-                  className="ml-3 text-sm text-gray-500"
+                  onClick={() => setShowCurrentPassword((v) => !v)}
+                  className="ml-3 text-sm text-gray-500 hover:text-gray-700"
                 >
-                  {showPassword ? (
+                  {showCurrentPassword ? (
                     <Image
                       src={CloseEyeIcon}
                       alt="Ícone olho fechado"
@@ -129,27 +94,66 @@ export default function SignIn() {
                   )}
                 </button>
               </div>
-              {errors.password && (
+              {errors.currentPassword && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.password.message}
+                  {errors.currentPassword.message}
                 </p>
               )}
             </label>
 
-            <a href="/alterar-senha" className="text-sm text-blue-700">
-              Esqueci minha senha
+            <label className="flex flex-col relative">
+              <span className="text-sm text-gray-600 mb-2">Senha nova</span>
+              <div className="flex items-center">
+                <input
+                  type={showNewPassword ? "text" : "password"}
+                  {...register("newPassword")}
+                  className="flex-1 border-b border-gray-300 py-2 bg-transparent outline-none"
+                  placeholder="Senha nova"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowNewPassword((v) => !v)}
+                  className="ml-3 text-sm text-gray-500 hover:text-gray-700"
+                >
+                  {showNewPassword ? (
+                    <Image
+                      src={CloseEyeIcon}
+                      alt="Ícone olho fechado"
+                      className="h-5 w-5 cursor-pointer"
+                    />
+                  ) : (
+                    <Image
+                      src={OpenEyeIcon}
+                      alt="Ícone olho aberto"
+                      className="h-5 w-5 cursor-pointer"
+                    />
+                  )}
+                </button>
+              </div>
+              {errors.newPassword && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.newPassword.message}
+                </p>
+              )}
+            </label>
+
+            <a href="/sign-in" className="text-sm text-blue-700">
+              Fazer login
             </a>
 
             <button
               type="submit"
               disabled={!isValid || isSubmitting}
-              className={`h-12 w-28 mt-4 mb-6 py-3 rounded-md transition ${isValid ? "bg-[#FF6202] hover:bg-[#ff6302e3] cursor-pointer text-white" : "bg-gray-300 text-gray-600"} disabled:opacity-50`}
+              className={`h-12 w-28 mt-4 mb-6 py-3 rounded-md transition ${
+                isValid
+                  ? "bg-[#FF6202] hover:bg-[#ff6302e3] cursor-pointer text-white"
+                  : "bg-gray-300 text-gray-600"
+              } disabled:opacity-50`}
             >
-              Continue
+              Salvar
             </button>
           </form>
         </div>
-
         <footer className="text-sm text-gray-500 mt-auto">
           2023 - Itaú Private Bank. All rights reserved. Privacy Policy
         </footer>
