@@ -1,5 +1,5 @@
 import Image from "next/image";
-import IconeHome from "@/assets/icone-home.png";
+import HomeIcon from "@/assets/home-icon.png";
 
 export default function Sidebar() {
   return (
@@ -17,7 +17,7 @@ export default function Sidebar() {
         </div>
 
         <div className="flex gap-3 text-[#FF6202] items-center">
-          <Image className="w-5 h-5" src={IconeHome} alt="Ícone Home" />
+          <Image className="w-5 h-5" src={HomeIcon} alt="Ícone Home" />
           <p>Home</p>
         </div>
       </div>
