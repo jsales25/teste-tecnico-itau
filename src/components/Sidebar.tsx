@@ -1,7 +1,27 @@
+"use client";
+
 import Image from "next/image";
 import HomeIcon from "@/assets/home-icon.png";
+import { useRouter } from "next/navigation";
 
 export default function Sidebar() {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      // 1. Chama a API para deletar o cookie
+      await fetch("/api/auth/logout", { method: "POST" });
+
+      // 2. Limpa o localStorage
+      localStorage.clear();
+
+      // 3. Redireciona para o login
+      router.push("/sign-in");
+    } catch (error) {
+      console.error("Erro ao sair:", error);
+    }
+  };
+
   return (
     <aside className="w-full md:w-72 min-h-screen flex flex-col gap-8 bg-[#0D0E0E] text-white px-9 py-9">
       <div className="flex justify-end">
@@ -10,7 +30,7 @@ export default function Sidebar() {
         </h2>
       </div>
 
-      <div className="flex flex-col gap-9 pb-2.5">
+      <div className="flex flex-col gap-9 pb-2.5 flex-1">
         <div className="flex gap-3 items-center font-semibold">
           <span className="h-8 w-8 bg-[#FF6202] rounded-[7px] block"></span>
           <h3>Portal</h3>
@@ -20,6 +40,15 @@ export default function Sidebar() {
           <Image className="w-5 h-5" src={HomeIcon} alt="Ícone Home" />
           <p>Home</p>
         </div>
+      </div>
+
+      <div className="mt-auto">
+        <button
+          onClick={handleLogout}
+          className="w-full py-2 text-sm text-zinc-400 hover:text-white transition border border-white/10 rounded-md cursor-pointer"
+        >
+          Sair do sistema
+        </button>
       </div>
     </aside>
   );

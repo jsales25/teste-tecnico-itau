@@ -7,14 +7,37 @@ import CreateProductModal from "@/components/CreateProductModal";
 
 type HeaderProps = {
   total: number;
+  onProductCreated?: () => void;
 };
 
-export default function Header({ total }: HeaderProps) {
+export default function Header({ total, onProductCreated }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleSave = (product: { name: string; code: string }) => {
-    console.log("Produto salvo:", product);
-    setIsOpen(false);
+  const handleSave = async (product: { name: string; code: string }) => {
+    try {
+      const token = localStorage.getItem("token");
+      
+      const response = await fetch("/api/products", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          name: product.name,
+          price: 0, // Como seu modal não tem preço, enviamos 0 ou um padrão
+          description: product.code // Usando código como descrição para exemplo
+        }),
+      });
+
+      if (!response.ok) throw new Error("Erro ao criar produto");
+
+      setIsOpen(false);
+      if (onProductCreated) onProductCreated();
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao criar produto");
+    }
   };
 
   return (

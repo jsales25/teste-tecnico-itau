@@ -10,10 +10,15 @@ import CloseEyeIcon from "@/assets/close-eye-icon.png";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { changePasswordSchema, type ChangePasswordForm } from "@/schemas/auth";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function ChangePassword() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const router = useRouter();
 
   const {
     register,
@@ -25,9 +30,44 @@ export default function ChangePassword() {
     defaultValues: { currentPassword: "", newPassword: "" },
   });
 
-  const onSubmit = (data: ChangePasswordForm) => {
-    // dados válidos (envie para a API aqui)
-    console.log("Senha alterada:", data);
+  const onSubmit = async (data: ChangePasswordForm) => {
+    setError(null);
+    setSuccess(null);
+    
+    try {
+      // 1. Pegamos o token do localStorage
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        throw new Error("Você precisa estar logado para alterar a senha.");
+      }
+
+      // 2. Chamamos a API enviando o token no Header
+      const response = await fetch("/api/auth/change-password", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Erro ao alterar senha");
+      }
+
+      setSuccess("Senha alterada com sucesso!");
+      
+      // Opcional: Redirecionar após alguns segundos ou limpar o formulário
+      setTimeout(() => {
+        router.push("/sign-in");
+      }, 2000);
+
+    } catch (err: any) {
+      setError(err.message);
+    }
   };
 
   return (
@@ -46,20 +86,34 @@ export default function ChangePassword() {
       </aside>
 
       <main className="bg-white flex-1 p-9 text-black flex flex-col min-h-0">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center ">
+          
           <div className="flex gap-2 items-center">
             <Image src={WorldIcon} alt="Ícone mundo" className="h-5 w-5" />
             <p>BR</p>
           </div>
 
-          <div className="flex gap-2 items-center">
+          <Link href="/produtos" className="flex gap-2 items-center">
             <Image src={CloseIcon} alt="Ícone fechar" className="h-5 w-5" />
             <p>Close</p>
-          </div>
+          </Link>
+
         </div>
 
         <div className="mt-10 max-w-md flex-1 min-h-0 overflow-y-auto">
-          <h1 className="text-3xl font-semibold mb-8">Altere sua senha</h1>
+          <h1 className="text-3xl mb-8">Altere sua senha</h1>
+
+          {error && (
+            <p className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4 text-sm">
+              {error}
+            </p>
+          )}
+
+          {success && (
+            <p className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mb-4 text-sm">
+              {success}
+            </p>
+          )}
 
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -137,9 +191,9 @@ export default function ChangePassword() {
               )}
             </label>
 
-            <a href="/sign-in" className="text-sm text-blue-700">
+            <Link href="/sign-in" className="text-sm text-blue-900 font-semibold underline">
               Fazer login
-            </a>
+            </Link>
 
             <button
               type="submit"
@@ -150,7 +204,7 @@ export default function ChangePassword() {
                   : "bg-gray-300 text-gray-600"
               } disabled:opacity-50`}
             >
-              Salvar
+              {isSubmitting ? "Salvando..." : "Salvar"}
             </button>
           </form>
         </div>

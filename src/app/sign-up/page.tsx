@@ -9,11 +9,11 @@ import CloseEyeIcon from "@/assets/close-eye-icon.png";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, type LoginForm } from "@/schemas/auth";
+import { registerSchema, type RegisterForm } from "@/schemas/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function SignIn() {
+export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -22,17 +22,17 @@ export default function SignIn() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
-  } = useForm<LoginForm>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<RegisterForm>({
+    resolver: zodResolver(registerSchema),
     mode: "onBlur",
     reValidateMode: "onChange",
-    defaultValues: { location: "sp", email: "", password: "" },
+    defaultValues: { name: "", email: "", password: "" },
   });
 
-  const onSubmit = async (data: LoginForm) => {
+  const onSubmit = async (data: RegisterForm) => {
     setError(null);
     try {
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -41,15 +41,11 @@ export default function SignIn() {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || "Erro ao fazer login");
+        throw new Error(result.error || "Erro ao criar conta");
       }
 
-      // 1. Salvamos o token e os dados do usuário
-      localStorage.setItem("token", result.token);
-      localStorage.setItem("user", JSON.stringify(result.user));
-
-      // 2. Redirecionamos para a página de produtos
-      router.push("/produtos");
+      // Se deu certo, redireciona para o login
+      router.push("/sign-in");
     } catch (err: any) {
       setError(err.message);
     }
@@ -77,14 +73,14 @@ export default function SignIn() {
             <p>BR</p>
           </div>
 
-          <Link href="/sign-up" className="flex gap-2 items-center">
+          <Link href="/sign-in" className="flex gap-2 items-center">
             <Image src={CloseIcon} alt="Ícone fechar" className="h-5 w-5" />
-            <p>Criar conta</p>
+            <p>Close</p>
           </Link>
         </div>
 
         <div className="mt-10 max-w-md flex-1 min-h-0 ">
-          <h1 className="text-3xl  mb-8">Faça seu login</h1>
+          <h1 className="text-3xl  mb-8">Crie sua conta</h1>
 
           {error && (
             <p className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4 text-sm">
@@ -97,27 +93,20 @@ export default function SignIn() {
             className="flex flex-col gap-6"
           >
             <label className="flex flex-col">
-              <span className="text-sm text-gray-600 mb-2">
-                Selecione sua localização
-              </span>
-              <select
-                {...register("location")}
-                className="border-b  border-gray-300 py-2 bg-transparent cursor-pointer outline-none"
-              >
-                <option value="sp">São Paulo</option>
-                <option value="rj">Rio de Janeiro</option>
-                <option value="mg">Minas Gerais</option>
-                <option value="pe">Pernambuco</option>
-              </select>
-              {errors.location && (
+              <input
+                type="text"
+                {...register("name")}
+                className="border-b border-gray-300 py-2 bg-transparent outline-none"
+                placeholder="Nome completo"
+              />
+              {errors.name && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.location.message}
+                  {errors.name.message}
                 </p>
               )}
             </label>
 
             <label className="flex flex-col">
-             
               <input
                 type="email"
                 {...register("email")}
@@ -132,7 +121,6 @@ export default function SignIn() {
             </label>
 
             <label className="flex flex-col relative">
-              
               <div className="flex items-center">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -167,18 +155,21 @@ export default function SignIn() {
               )}
             </label>
 
-            <Link href="/change-password" className="text-sm text-blue-900 font-semibold underline">
-              Esqueci minha senha
-            </Link>
-
             <button
               type="submit"
               disabled={!isValid || isSubmitting}
               className={`h-12 w-28 mt-4 mb-6 py-3 rounded-md transition ${isValid ? "bg-[#FF6202] hover:bg-[#ff6302e3] cursor-pointer text-white" : "bg-gray-300 text-gray-600"} disabled:opacity-50`}
             >
-              Continue
+              {isSubmitting ? "Criando..." : "Cadastrar"}
             </button>
           </form>
+
+          <p className="text-sm">
+            Já tem uma conta?{" "}
+            <Link href="/sign-in" className="text-blue-900 font-semibold underline">
+              Faça login
+            </Link>
+          </p>
         </div>
 
         <footer className="text-sm text-gray-500 mt-auto">

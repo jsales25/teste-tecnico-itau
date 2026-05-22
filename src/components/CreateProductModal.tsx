@@ -65,7 +65,7 @@ export default function CreateProductModal({
               value={name}
               onChange={(event) => setName(event.target.value)}
               placeholder="Insira o nome do produto"
-              className="w-full rounded-md border border-white/10 bg-[#090909] px-4 py-2 text-white outline-none transition duration-150 placeholder:text-zinc-500 focus:border-[#FF6202]"
+              className="w-full rounded-md border border-white/50 bg-[#090909] px-4 py-2 text-white outline-none transition duration-150 placeholder:text-zinc-500 focus:border-[#FF6202]"
             />
           </label>
 
@@ -75,7 +75,7 @@ export default function CreateProductModal({
               value={code}
               onChange={(event) => setCode(event.target.value)}
               placeholder="Insira o código do produto"
-              className="w-full rounded-md border border-white/10 bg-[#090909] px-4 py-2 text-white outline-none transition duration-150 placeholder:text-zinc-500 focus:border-[#FF6202] mb-12"
+              className="w-full rounded-md border border-white/50 bg-[#090909] px-4 py-2 text-white outline-none transition duration-150 placeholder:text-zinc-500 focus:border-[#FF6202] mb-12"
             />
           </label>
 
@@ -89,7 +89,7 @@ export default function CreateProductModal({
             </button>
             <button
               type="submit"
-              className="rounded-md bg-[#FF6202] py-2 text-sm font-semibold text-white transition hover:bg-[#ff7a18] cursor-pointer w-full"
+              className="rounded-md bg-[#FF6202] py-2 text-sm text-white transition hover:bg-[#ff7a18] cursor-pointer w-full"
             >
               Salvar
             </button>
