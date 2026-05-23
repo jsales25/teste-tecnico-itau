@@ -79,7 +79,7 @@ export default function SignIn() {
 
           <Link href="/sign-up" className="flex gap-2 items-center">
             <Image src={CloseIcon} alt="Ícone fechar" className="h-5 w-5" />
-            <p>Criar conta</p>
+            <p>Close</p>
           </Link>
         </div>
 
@@ -167,9 +167,18 @@ export default function SignIn() {
               )}
             </label>
 
-            <Link href="/change-password" className="text-sm text-blue-900 font-semibold underline">
+            <div className="flex gap-6">
+              <Link href="/change-password" className="text-sm text-blue-900 font-semibold underline">
               Esqueci minha senha
             </Link>
+
+            <p className="text-sm">
+            Não tem uma conta?{" "}
+            <Link href="/sign-up" className="text-sm text-blue-900 font-semibold underline">
+              Criar conta
+            </Link>
+            </p>
+            </div>
 
             <button
               type="submit"
