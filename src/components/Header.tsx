@@ -5,6 +5,7 @@ import Image from "next/image";
 import PlusIcon from "@/assets/plus-icon.png";
 import CreateProductModal from "@/components/CreateProductModal";
 import { useToast } from "./ToastContext";
+import { api } from "@/lib/api";
 
 type HeaderProps = {
   total: number;
@@ -17,22 +18,11 @@ export default function Header({ total, onProductCreated }: HeaderProps) {
 
   const handleSave = async (product: { name: string; code: string }) => {
     try {
-      const token = localStorage.getItem("token");
-      
-      const response = await fetch("/api/products", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          name: product.name,
-          price: 0, 
-          description: product.code 
-        }),
+      await api.post("/api/products", {
+        name: product.name,
+        price: 0, 
+        description: product.code 
       });
-
-      if (!response.ok) throw new Error("Erro ao criar produto");
 
       showToast("Produto criado com sucesso!", "success");
       setIsOpen(false);

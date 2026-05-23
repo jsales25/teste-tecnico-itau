@@ -5,6 +5,7 @@ import Image from "next/image";
 import CloseIcon from "@/assets/close-icon.png";
 import EditProductModal from "./EditProductModal";
 import { useToast } from "./ToastContext";
+import { api } from "@/lib/api";
 
 type ProductCardProps = {
   id: string;
@@ -22,16 +23,7 @@ export default function ProductCard({ id, title, description, onDelete, onUpdate
     if (!confirm(`Tem certeza que deseja deletar o produto "${title}"?`)) return;
 
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`/api/products/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      });
-
-      if (!response.ok) throw new Error("Erro ao deletar produto");
-
+      await api.delete(`/api/products/${id}`);
       showToast("Produto deletado com sucesso!", "success");
       if (onDelete) onDelete();
     } catch (error) {
@@ -42,20 +34,10 @@ export default function ProductCard({ id, title, description, onDelete, onUpdate
 
   const handleUpdate = async (product: { name: string; description: string }) => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`/api/products/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          name: product.name,
-          description: product.description
-        })
+      await api.patch(`/api/products/${id}`, {
+        name: product.name,
+        description: product.description
       });
-
-      if (!response.ok) throw new Error("Erro ao atualizar produto");
 
       showToast("Produto atualizado com sucesso!", "success");
       setIsEditModalOpen(false);

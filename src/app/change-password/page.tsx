@@ -12,8 +12,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { changePasswordSchema, type ChangePasswordForm } from "@/schemas/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
 import { useToast } from "@/components/ToastContext";
+import { api } from "@/lib/api";
 
 export default function ChangePassword() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
@@ -33,26 +33,7 @@ export default function ChangePassword() {
 
   const onSubmit = async (data: ChangePasswordForm) => {
     try {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        throw new Error("Você precisa estar logado para alterar a senha.");
-      }
-
-      const response = await fetch("/api/auth/change-password", {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || "Erro ao alterar senha");
-      }
+      await api.post("/api/auth/change-password", data);
 
       showToast("Senha alterada com sucesso!", "success");
       

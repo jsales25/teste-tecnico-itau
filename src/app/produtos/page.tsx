@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
 import Sidebar from "@/components/Sidebar";
+import { api } from "@/lib/api";
 
 interface Produto {
   id: string;
@@ -19,18 +20,7 @@ export default function ProdutosPage() {
 
   const fetchProdutos = async () => {
     try {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
-      const response = await fetch("/api/products", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) throw new Error("Erro ao carregar produtos");
-
-      const data = await response.json();
+      const data = await api.get("/api/products");
       setProdutos(data);
     } catch (err: any) {
       setError(err.message);
