@@ -13,11 +13,12 @@ import { changePasswordSchema, type ChangePasswordForm } from "@/schemas/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import { useToast } from "@/components/ToastContext";
+
 export default function ChangePassword() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const { showToast } = useToast();
   const router = useRouter();
 
   const {
@@ -31,18 +32,13 @@ export default function ChangePassword() {
   });
 
   const onSubmit = async (data: ChangePasswordForm) => {
-    setError(null);
-    setSuccess(null);
-    
     try {
-      // 1. Pegamos o token do localStorage
       const token = localStorage.getItem("token");
 
       if (!token) {
         throw new Error("Você precisa estar logado para alterar a senha.");
       }
 
-      // 2. Chamamos a API enviando o token no Header
       const response = await fetch("/api/auth/change-password", {
         method: "POST",
         headers: { 
@@ -58,15 +54,14 @@ export default function ChangePassword() {
         throw new Error(result.error || "Erro ao alterar senha");
       }
 
-      setSuccess("Senha alterada com sucesso!");
+      showToast("Senha alterada com sucesso!", "success");
       
-      // Opcional: Redirecionar após alguns segundos ou limpar o formulário
       setTimeout(() => {
         router.push("/sign-in");
       }, 2000);
 
     } catch (err: any) {
-      setError(err.message);
+      showToast(err.message, "error");
     }
   };
 
@@ -102,18 +97,6 @@ export default function ChangePassword() {
 
         <div className="mt-10 max-w-md flex-1 min-h-0 overflow-y-auto">
           <h1 className="text-3xl mb-8">Altere sua senha</h1>
-
-          {error && (
-            <p className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4 text-sm">
-              {error}
-            </p>
-          )}
-
-          {success && (
-            <p className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mb-4 text-sm">
-              {success}
-            </p>
-          )}
 
           <form
             onSubmit={handleSubmit(onSubmit)}

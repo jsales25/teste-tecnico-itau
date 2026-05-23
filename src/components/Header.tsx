@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import PlusIcon from "@/assets/plus-icon.png";
 import CreateProductModal from "@/components/CreateProductModal";
+import { useToast } from "./ToastContext";
 
 type HeaderProps = {
   total: number;
@@ -12,6 +13,7 @@ type HeaderProps = {
 
 export default function Header({ total, onProductCreated }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const { showToast } = useToast();
 
   const handleSave = async (product: { name: string; code: string }) => {
     try {
@@ -25,18 +27,19 @@ export default function Header({ total, onProductCreated }: HeaderProps) {
         },
         body: JSON.stringify({
           name: product.name,
-          price: 0, // Como seu modal não tem preço, enviamos 0 ou um padrão
-          description: product.code // Usando código como descrição para exemplo
+          price: 0, 
+          description: product.code 
         }),
       });
 
       if (!response.ok) throw new Error("Erro ao criar produto");
 
+      showToast("Produto criado com sucesso!", "success");
       setIsOpen(false);
       if (onProductCreated) onProductCreated();
     } catch (error) {
       console.error(error);
-      alert("Erro ao criar produto");
+      showToast("Erro ao criar produto", "error");
     }
   };
 

@@ -64,7 +64,9 @@ export default function ProdutosPage() {
                   key={produto.id} 
                   id={produto.id}
                   title={produto.name} 
+                  description={produto.description}
                   onDelete={fetchProdutos}
+                  onUpdate={fetchProdutos}
                 />
               ))
             )}
