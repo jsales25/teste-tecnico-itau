@@ -13,6 +13,36 @@ import { loginSchema, type LoginForm } from "@/schemas/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+const BRAZILIAN_STATES = [
+  { value: "ac", label: "Acre" },
+  { value: "al", label: "Alagoas" },
+  { value: "ap", label: "Amapá" },
+  { value: "am", label: "Amazonas" },
+  { value: "ba", label: "Bahia" },
+  { value: "ce", label: "Ceará" },
+  { value: "df", label: "Distrito Federal" },
+  { value: "es", label: "Espírito Santo" },
+  { value: "go", label: "Goiás" },
+  { value: "ma", label: "Maranhão" },
+  { value: "mt", label: "Mato Grosso" },
+  { value: "ms", label: "Mato Grosso do Sul" },
+  { value: "mg", label: "Minas Gerais" },
+  { value: "pa", label: "Pará" },
+  { value: "pb", label: "Paraíba" },
+  { value: "pr", label: "Paraná" },
+  { value: "pe", label: "Pernambuco" },
+  { value: "pi", label: "Piauí" },
+  { value: "rj", label: "Rio de Janeiro" },
+  { value: "rn", label: "Rio Grande do Norte" },
+  { value: "rs", label: "Rio Grande do Sul" },
+  { value: "ro", label: "Rondônia" },
+  { value: "rr", label: "Roraima" },
+  { value: "sc", label: "Santa Catarina" },
+  { value: "sp", label: "São Paulo" },
+  { value: "se", label: "Sergipe" },
+  { value: "to", label: "Tocantins" },
+];
+
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -104,10 +134,11 @@ export default function SignIn() {
                 {...register("location")}
                 className="border-b  border-gray-300 py-2 bg-transparent cursor-pointer outline-none"
               >
-                <option value="sp">São Paulo</option>
-                <option value="rj">Rio de Janeiro</option>
-                <option value="mg">Minas Gerais</option>
-                <option value="pe">Pernambuco</option>
+                {BRAZILIAN_STATES.map((state) => (
+                  <option key={state.value} value={state.value}>
+                    {state.label}
+                  </option>
+                ))}
               </select>
               {errors.location && (
                 <p className="text-red-500 text-sm mt-1">
