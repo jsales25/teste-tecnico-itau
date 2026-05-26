@@ -7,7 +7,7 @@ export function middleware(request: NextRequest) {
 
   // 2. Definimos quais rotas queremos proteger
   const isProtectedPage = 
-    request.nextUrl.pathname.startsWith("/produtos") || 
+    request.nextUrl.pathname.startsWith("/products") || 
     request.nextUrl.pathname.startsWith("/change-password");
 
   // 3. Se o usuário tentar acessar uma página protegida sem token, mandamos para o login
@@ -21,7 +21,7 @@ export function middleware(request: NextRequest) {
     request.nextUrl.pathname === "/sign-up";
 
   if (isAuthPage && token) {
-    return NextResponse.redirect(new URL("/produtos", request.url));
+    return NextResponse.redirect(new URL("/products", request.url));
   }
 
   return NextResponse.next();
@@ -29,5 +29,5 @@ export function middleware(request: NextRequest) {
 
 // 5. Configuramos em quais caminhos o Middleware deve rodar
 export const config = {
-  matcher: ["/produtos/:path*", "/change-password/:path*", "/sign-in", "/sign-up"],
+  matcher: ["/products/:path*", "/change-password/:path*", "/sign-in", "/sign-up"],
 };

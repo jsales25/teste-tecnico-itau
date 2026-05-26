@@ -72,7 +72,7 @@ export default function SignIn() {
       showToast("Login realizado com sucesso!", "success");
 
       // 2. Redirecionamos para a página de produtos
-      router.push("/produtos");
+      router.push("/products");
     } catch (err: any) {
       showToast(err.message, "error");
     }

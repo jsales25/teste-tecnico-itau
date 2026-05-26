@@ -69,10 +69,11 @@ export default function ChangePassword() {
             <p>BR</p>
           </div>
 
-          <Link href="/produtos" className="flex gap-2 items-center">
+          <Link href="/products" className="flex gap-2 items-center">
             <Image src={CloseIcon} alt="Ícone fechar" className="h-5 w-5" />
             <p>Close</p>
           </Link>
+
 
         </div>
 

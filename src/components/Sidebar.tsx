@@ -3,6 +3,7 @@
 import Image from "next/image";
 import HomeIcon from "@/assets/home-icon.png";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Sidebar() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function Sidebar() {
       // 2. Limpa o localStorage
       localStorage.clear();
 
-      // 3. Redireciona para o login
+      // 3. Redirecionamos para o login
       router.push("/sign-in");
     } catch (error) {
       console.error("Erro ao sair:", error);
@@ -42,7 +43,13 @@ export default function Sidebar() {
         </div>
       </div>
 
-      <div className="mt-auto">
+      <div className="mt-auto flex flex-col gap-3">
+        <Link 
+          href="/change-password"
+          className="w-full py-2 text-center text-sm text-zinc-400 hover:text-white transition border border-white/10 rounded-md cursor-pointer"
+        >
+          Alterar senha
+        </Link>
         <button
           onClick={handleLogout}
           className="w-full py-2 text-sm text-zinc-400 hover:text-white transition border border-white/10 rounded-md cursor-pointer"
@@ -53,3 +60,4 @@ export default function Sidebar() {
     </aside>
   );
 }
+
