@@ -12,7 +12,7 @@ O Portal de Produtos é uma ferramenta desenvolvida para simular um ambiente adm
 
 ### Tela de Portal de Produtos
 <div align="center">
-  <img src="./src/design/portal-de-produtos.png" width="400px" alt="Portal de Produtos" />
+  <img src="./src/design/design-final-portal-de-produtos.png" width="400px" alt="Portal de Produtos" />
 </div>
 
 ---
