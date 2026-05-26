@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Desafio Técnico - Portal de Produtos
 
-## Getting Started
+Este projeto é uma aplicação Fullstack desenvolvida como parte de um teste técnico. O objetivo principal é oferecer uma plataforma segura e intuitiva para a gestão de produtos, contando com um sistema completo de autenticação e persistência de dados em tempo real.
 
-First, run the development server:
+## 📋 Resumo do Projeto
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+O Portal de Produtos é uma ferramenta desenvolvida para simular um ambiente administrativo onde usuários podem se cadastrar, realizar login com segurança e gerenciar (Criar, Ler, Atualizar e Deletar) sua própria lista de produtos. A aplicação foca fortemente em **segurança de dados** e **experiência do usuário (UX)**.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📸 Screenshots
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Tela de Portal de Produtos
+<div align="center">
+  <img src="./src/design/portal-de-produtos.png" width="400px" alt="Portal de Produtos" />
+</div>
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🔗 Links
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+*   **Repositório:** [https://github.com/jsales25/teste-tecnico-itau](https://github.com/jsales25/teste-tecnico-itau)
+*   **Deploy (Vercel):** [https://teste-tecnico.vercel.app](https://teste-tecnico.vercel.app)
+> *Nota: Por ser um projeto que utiliza banco de dados e autenticação via API, ele foi publicado na Vercel para pleno funcionamento (Github Pages é apenas para sites estáticos).*
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🛠️ Tecnologias Utilizadas
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+*   **Frontend:** [Next.js](https://nextjs.org/) (App Router), [React](https://reactjs.org/), [Tailwind CSS](https://tailwindcss.com/).
+*   **Backend:** Next.js API Routes.
+*   **Banco de Dados:** [Neon](https://neon.tech/) (PostgreSQL) com [Prisma ORM](https://www.prisma.io/).
+*   **Autenticação:** [JWT](https://jwt.io/) (JSON Web Tokens) com armazenamento em Cookies **HttpOnly** para maior segurança.
+*   **Validação:** [Zod](https://zod.dev/) e [React Hook Form](https://react-hook-form.com/).
+*   **Criptografia:** [Bcryptjs](https://www.npmjs.com/package/bcryptjs) para hashing de senhas.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🧠 O que eu aprendi
+
+Durante o desenvolvimento deste projeto, pude consolidar conhecimentos fundamentais de engenharia de software:
+
+1.  **Segurança em Camadas:** Implementei o uso de Cookies `HttpOnly` para armazenar o Token JWT, o que protege a aplicação contra ataques XSS, além de usar hashing `bcrypt` para nunca salvar senhas em texto puro.
+2.  **Arquitetura e Reutilização:** Criei um serviço centralizado de API (`src/lib/api.ts`) que automatiza headers e tratamento de erros, facilitando a manutenção do código.
+3.  **Experiência do Usuário (UX):** Desenvolvi um sistema de notificações flutuantes (Toasts) via Context API e validações em tempo real nos formulários, garantindo que o usuário receba feedback imediato.
+4.  **Modelagem de Dados:** Utilizei o Prisma para gerenciar o relacionamento entre Usuários e Produtos, garantindo integridade referencial.
+
+---
+
+## 👤 Autor
+
+Desenvolvido por **Julia Sales**
+
+*   **GitHub:** [github.com/jsales25](https://github.com/jsales25)
+*   **LinkedIn:** [linkedin.com/in/julia-sales-developer](https://linkedin.com/in/julia-sales-developer)
+
+---
+
+<div align="center">
+  Desenvolvido com 💜 por Julia Sales
+</div>
