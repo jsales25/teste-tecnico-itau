@@ -12,10 +12,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, type RegisterForm } from "@/schemas/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { api } from "@/lib/api";
+import { useToast } from "@/components/ToastContext";
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
   const router = useRouter();
 
   const {
@@ -30,24 +32,15 @@ export default function SignUp() {
   });
 
   const onSubmit = async (data: RegisterForm) => {
-    setError(null);
     try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || "Erro ao criar conta");
-      }
+      await api.post("/api/auth/register", data);
+      
+      showToast("Conta criada com sucesso!", "success");
 
       // Se deu certo, redireciona para o login
       router.push("/sign-in");
     } catch (err: any) {
-      setError(err.message);
+      showToast(err.message, "error");
     }
   };
 
@@ -81,12 +74,6 @@ export default function SignUp() {
 
         <div className="mt-10 max-w-md flex-1 min-h-0 ">
           <h1 className="text-3xl  mb-8">Crie sua conta</h1>
-
-          {error && (
-            <p className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4 text-sm">
-              {error}
-            </p>
-          )}
 
           <form
             onSubmit={handleSubmit(onSubmit)}

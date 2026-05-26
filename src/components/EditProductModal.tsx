@@ -1,8 +1,18 @@
 "use client";
 
-import { FormEvent, useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import Image from "next/image";
 import CloseIconModal from "@/assets/close-icon-modal.png";
+
+const editProductSchema = z.object({
+  name: z.string().nonempty("O nome do produto é obrigatório"),
+  description: z.string().nonempty("A descrição/código é obrigatória"),
+});
+
+type EditProductForm = z.infer<typeof editProductSchema>;
 
 type EditProductModalProps = {
   open: boolean;
@@ -20,28 +30,34 @@ export default function EditProductModal({
   onSave,
   initialData,
 }: EditProductModalProps) {
-  const [name, setName] = useState(initialData.name);
-  const [description, setDescription] = useState(initialData.description);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isValid },
+  } = useForm<EditProductForm>({
+    resolver: zodResolver(editProductSchema),
+    mode: "onChange",
+    defaultValues: initialData,
+  });
 
   useEffect(() => {
     if (open) {
-      setName(initialData.name);
-      setDescription(initialData.description);
+      reset(initialData);
     }
-  }, [open, initialData]);
+  }, [open, initialData, reset]);
 
   if (!open) {
     return null;
   }
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const onSubmit = (data: EditProductForm) => {
+    onSave(data);
+    onClose();
+  };
 
-    if (!name.trim() || !description.trim()) {
-      return;
-    }
-
-    onSave({ name: name.trim(), description: description.trim() });
+  const handleClose = () => {
+    reset(initialData);
     onClose();
   };
 
@@ -51,7 +67,7 @@ export default function EditProductModal({
         <div className="flex justify-end">
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             className="rounded-full p-2 text-zinc-400 transition hover:bg-white/10 hover:text-white"
           >
             <Image
@@ -67,38 +83,43 @@ export default function EditProductModal({
         </h3>
 
         <div className="flex justify-center">
-          <form onSubmit={handleSubmit} className="mt-8 space-y-6 w-md">
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6 w-md">
             <label className="flex flex-col gap-2 text-sm text-zinc-300">
               <span>Nome do produto</span>
               <input
-                value={name}
-                onChange={(event) => setName(event.target.value)}
+                {...register("name")}
                 placeholder="Insira o nome do produto"
-                className="w-full rounded-md border border-white/50 bg-[#090909] px-4 py-2 text-white outline-none transition duration-150 placeholder:text-zinc-500 focus:border-[#FF6202]"
+                className={`w-full rounded-md border ${errors.name ? "border-red-500" : "border-white/50"} bg-[#090909] px-4 py-2 text-white outline-none transition duration-150 placeholder:text-zinc-500 focus:border-[#FF6202]`}
               />
+              {errors.name && (
+                <span className="text-xs text-red-500">{errors.name.message}</span>
+              )}
             </label>
 
             <label className="flex flex-col gap-2 text-sm text-zinc-300">
               <span>Código/Descrição</span>
               <input
-                value={description}
-                onChange={(event) => setDescription(event.target.value)}
+                {...register("description")}
                 placeholder="Insira a descrição do produto"
-                className="w-full rounded-md border border-white/50 bg-[#090909] px-4 py-2 text-white outline-none transition duration-150 placeholder:text-zinc-500 focus:border-[#FF6202] mb-12"
+                className={`w-full rounded-md border ${errors.description ? "border-red-500" : "border-white/50"} bg-[#090909] px-4 py-2 text-white outline-none transition duration-150 placeholder:text-zinc-500 focus:border-[#FF6202]`}
               />
+              {errors.description && (
+                <span className="text-xs text-red-500">{errors.description.message}</span>
+              )}
             </label>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
               <button
                 type="button"
-                onClick={onClose}
+                onClick={handleClose}
                 className="rounded-md border border-white/10 bg-[#646865] py-2 text-sm text-white transition hover:bg-white/30 cursor-pointer w-full"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
-                className="rounded-md bg-[#FF6202] py-2 text-sm text-white transition hover:bg-[#ff7a18] cursor-pointer w-full"
+                disabled={!isValid}
+                className={`rounded-md py-2 text-sm text-white transition w-full ${isValid ? "bg-[#FF6202] hover:bg-[#ff7a18] cursor-pointer" : "bg-gray-600 cursor-not-allowed"}`}
               >
                 Salvar Alterações
               </button>

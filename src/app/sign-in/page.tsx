@@ -12,6 +12,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginForm } from "@/schemas/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { api } from "@/lib/api";
+import { useToast } from "@/components/ToastContext";
 
 const BRAZILIAN_STATES = [
   { value: "ac", label: "Acre" },
@@ -45,7 +47,7 @@ const BRAZILIAN_STATES = [
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
   const router = useRouter();
 
   const {
@@ -60,28 +62,19 @@ export default function SignIn() {
   });
 
   const onSubmit = async (data: LoginForm) => {
-    setError(null);
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || "Erro ao fazer login");
-      }
+      const result = await api.post("/api/auth/login", data);
 
       // 1. Salvamos o token e os dados do usuário
       localStorage.setItem("token", result.token);
       localStorage.setItem("user", JSON.stringify(result.user));
 
+      showToast("Login realizado com sucesso!", "success");
+
       // 2. Redirecionamos para a página de produtos
       router.push("/produtos");
     } catch (err: any) {
-      setError(err.message);
+      showToast(err.message, "error");
     }
   };
 
@@ -115,12 +108,6 @@ export default function SignIn() {
 
         <div className="mt-10 max-w-md flex-1 min-h-0 ">
           <h1 className="text-3xl  mb-8">Faça seu login</h1>
-
-          {error && (
-            <p className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4 text-sm">
-              {error}
-            </p>
-          )}
 
           <form
             onSubmit={handleSubmit(onSubmit)}
