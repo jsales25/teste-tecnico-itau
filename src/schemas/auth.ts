@@ -16,7 +16,7 @@ export const changePasswordSchema = z.object({
 export type ChangePasswordForm = z.infer<typeof changePasswordSchema>;
 
 export const registerSchema = z.object({
-  name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
+  name: z.string().min(7, "Nome deve ter pelo menos 7 caracteres"),
   email: z.string().nonempty("Preenchimento obrigatório").email("Email inválido"),
   password: z.string().nonempty("Preenchimento obrigatório").min(8, "Senha deve ter no mínimo 8 caracteres"),
 });
