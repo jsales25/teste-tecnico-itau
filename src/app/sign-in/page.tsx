@@ -56,7 +56,7 @@ export default function SignIn() {
     formState: { errors, isSubmitting, isValid },
   } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
-    mode: "onBlur",
+    mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: { location: "sp", email: "", password: "" },
   });

@@ -26,7 +26,7 @@ export default function SignUp() {
     formState: { errors, isSubmitting, isValid },
   } = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
-    mode: "onBlur",
+    mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: { name: "", email: "", password: "" },
   });

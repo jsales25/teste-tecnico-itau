@@ -27,7 +27,7 @@ export default function ChangePassword() {
     formState: { errors, isSubmitting, isValid },
   } = useForm<ChangePasswordForm>({
     resolver: zodResolver(changePasswordSchema),
-    mode: "onBlur",
+    mode: "onChange",
     defaultValues: { currentPassword: "", newPassword: "" },
   });
 
