@@ -10,8 +10,9 @@ O Portal de Produtos é uma ferramenta desenvolvida para simular um ambiente adm
 
 ## 📸 Screenshots
 
-### Tela de Portal de Produtos
+### Tela de Login e Portal de Produtos
 <div align="center">
+  <img src="./src/design/design-final-login.png" width="400px" alt="Portal de Produtos" />
   <img src="./src/design/design-final-portal-de-produtos.png" width="400px" alt="Portal de Produtos" />
 </div>
 
@@ -19,8 +20,8 @@ O Portal de Produtos é uma ferramenta desenvolvida para simular um ambiente adm
 
 ## 🔗 Links
 
-*   **Repositório:** [https://github.com/jsales25/teste-tecnico-itau](https://github.com/jsales25/teste-tecnico-itau)
-*   **Deploy (Vercel):** [https://teste-tecnico.vercel.app](https://teste-tecnico.vercel.app)
+*   **Repositório:** [Acesse o repositório aqui](https://github.com/jsales25/teste-tecnico-itau)
+*   **Deploy (Vercel):** [Acesse o site aqui](https://portal-de-produtos-itau.vercel.app/)
 > *Nota: Por ser um projeto que utiliza banco de dados e autenticação via API, ele foi publicado na Vercel para pleno funcionamento (Github Pages é apenas para sites estáticos).*
 
 ---
@@ -47,12 +48,12 @@ Durante o desenvolvimento deste projeto, pude consolidar conhecimentos fundament
 
 ---
 
-## 👤 Autor
+## 👤 Autora
 
 Desenvolvido por **Julia Sales**
 
-*   **GitHub:** [github.com/jsales25](https://github.com/jsales25)
-*   **LinkedIn:** [linkedin.com/in/julia-sales-developer](https://linkedin.com/in/julia-sales-developer)
+*   **GitHub:** [Acesse o GitHub da autora aqui](https://github.com/jsales25)
+*   **LinkedIn:** [Acesse o LinkedIn da autora aqui](https://linkedin.com/in/julia-sales-developer)
 
 ---
 
