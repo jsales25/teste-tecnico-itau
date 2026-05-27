@@ -47,8 +47,8 @@ export default function ChangePassword() {
   };
 
   return (
-    <div className="flex h-screen">
-      <aside className="bg-[#030204] flex-1 px-9 py-9 overflow-hidden">
+    <div className="flex min-h-screen">
+      <aside className="hidden md:flex bg-[#030204] flex-1 px-9 py-9 overflow-hidden flex-col">
         <div>
           <h2 className="bg-white text-[18px] text-black h-10 w-10 rounded-[7px] flex justify-center items-end font-bold">
             itaú
@@ -61,7 +61,7 @@ export default function ChangePassword() {
         </div>
       </aside>
 
-      <main className="bg-white flex-1 p-9 text-black flex flex-col min-h-0">
+      <main className="bg-white flex-1 p-6 md:p-9 text-black flex flex-col min-h-screen">
         <div className="flex justify-between items-center ">
           
           <div className="flex gap-2 items-center">
@@ -77,7 +77,7 @@ export default function ChangePassword() {
 
         </div>
 
-        <div className="mt-10 max-w-md flex-1 min-h-0 overflow-y-auto">
+        <div className="mt-10 max-w-md flex-1 min-h-0">
           <h1 className="text-3xl mb-8">Altere sua senha</h1>
 
           <form
@@ -173,7 +173,7 @@ export default function ChangePassword() {
             </button>
           </form>
         </div>
-        <footer className="text-sm text-gray-500 mt-auto">
+        <footer className="text-sm text-gray-500 mt-8 md:mt-auto">
           2023 - Itaú Private Bank. All rights reserved. Privacy Policy
         </footer>
       </main>
