@@ -3,7 +3,6 @@ import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
 
-// 1. Definimos o esquema de validação para o cadastro
 const registerSchema = z.object({
   name: z.string().min(7, "Nome deve ter pelo menos 7 caracteres"),
   email: z.string().email("E-mail inválido"),
@@ -12,13 +11,10 @@ const registerSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    // 2. Pegamos os dados do corpo da requisição
     const body = await request.json();
 
-    // 3. Validamos os dados com o Zod
     const { name, email, password } = registerSchema.parse(body);
 
-    // 4. Verificamos se o usuário já existe
     const userExists = await prisma.user.findUnique({
       where: { email },
     });
@@ -30,11 +26,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // 5. Criptografamos a senha (Hash)
-    // O número 10 é o "salt", que torna a criptografia mais segura
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 6. Criamos o usuário no banco de dados
     const user = await prisma.user.create({
       data: {
         name,
@@ -51,13 +44,12 @@ export async function POST(request: Request) {
       },
     });
 
-    // 7. Retornamos sucesso (sem a senha por segurança!)
     return NextResponse.json(
       { message: "Usuário criado com sucesso!", userId: user.id },
       { status: 201 }
     );
   } catch (error) {
-    // Tratamento de erros de validação do Zod
+
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: error.errors[0].message },
@@ -65,7 +57,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // Erro genérico de servidor
     console.error("Erro no registro:", error);
     return NextResponse.json(
       { error: "Erro interno no servidor." },

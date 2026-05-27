@@ -4,7 +4,6 @@ import prisma from "@/lib/prisma";
 import { getAuthSession } from "@/lib/auth";
 import { z } from "zod";
 
-// 1. Esquema de validação para a troca de senha
 const changePasswordSchema = z.object({
   currentPassword: z.string().min(1, "Senha atual é obrigatória"),
   newPassword: z.string().min(8, "A nova senha deve ter pelo menos 8 caracteres"),
@@ -12,7 +11,6 @@ const changePasswordSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    // 2. Verifica se o usuário está autenticado
     const session = await getAuthSession(request);
 
     if (!session) {
@@ -24,10 +22,8 @@ export async function POST(request: Request) {
 
     const body = await request.json();
 
-    // 3. Valida os dados de entrada
     const { currentPassword, newPassword } = changePasswordSchema.parse(body);
 
-    // 4. Busca o usuário no banco de dados
     const user = await prisma.user.findUnique({
       where: { id: session.userId },
     });
@@ -39,7 +35,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // 5. Verifica se a senha atual está correta
     const isPasswordCorrect = await bcrypt.compare(currentPassword, user.password);
 
     if (!isPasswordCorrect) {
@@ -49,10 +44,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // 6. Criptografa a nova senha
     const hashedNewPassword = await bcrypt.hash(newPassword, 10);
 
-    // 7. Atualiza a senha no banco de dados
     await prisma.user.update({
       where: { id: user.id },
       data: { password: hashedNewPassword },

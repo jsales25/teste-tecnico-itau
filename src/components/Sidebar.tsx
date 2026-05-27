@@ -10,13 +10,10 @@ export default function Sidebar() {
 
   const handleLogout = async () => {
     try {
-      // 1. Chama a API para deletar o cookie
       await fetch("/api/auth/logout", { method: "POST" });
 
-      // 2. Limpa o localStorage
       localStorage.clear();
 
-      // 3. Redirecionamos para o login
       router.push("/sign-in");
     } catch (error) {
       console.error("Erro ao sair:", error);

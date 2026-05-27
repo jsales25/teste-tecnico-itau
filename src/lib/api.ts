@@ -1,9 +1,3 @@
-/**
- * utilitário simples para fazer chamadas de API centralizadas
- * Isso ajuda a evitar repetição de código como localStorage.getItem('token')
- * e a configuração manual de headers em cada arquivo.
- */
-
 async function apiFetch(endpoint: string, options: RequestInit = {}) {
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
@@ -23,10 +17,8 @@ async function apiFetch(endpoint: string, options: RequestInit = {}) {
 
   const response = await fetch(endpoint, config);
 
-  // Se o token for inválido (401), podemos opcionalmente redirecionar para o login
   if (response.status === 401 && typeof window !== "undefined") {
-    // localStorage.removeItem("token");
-    // window.location.href = "/sign-in";
+    
   }
 
   const data = await response.json();

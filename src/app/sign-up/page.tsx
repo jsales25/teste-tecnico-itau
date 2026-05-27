@@ -37,7 +37,6 @@ export default function SignUp() {
       
       showToast("Conta criada com sucesso!", "success");
 
-      // Se deu certo, redireciona para o login
       router.push("/sign-in");
     } catch (err: any) {
       showToast(err.message, "error");

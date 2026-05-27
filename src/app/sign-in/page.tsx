@@ -65,13 +65,11 @@ export default function SignIn() {
     try {
       const result = await api.post("/api/auth/login", data);
 
-      // 1. Salvamos o token e os dados do usuário
       localStorage.setItem("token", result.token);
       localStorage.setItem("user", JSON.stringify(result.user));
 
       showToast("Login realizado com sucesso!", "success");
 
-      // 2. Redirecionamos para a página de produtos
       router.push("/products");
     } catch (err: any) {
       showToast(err.message, "error");

@@ -8,10 +8,6 @@ export interface TokenPayload {
   email: string;
 }
 
-/**
- * Helper para validar o token JWT nas rotas da API.
- * Ele verifica o cabeçalho 'Authorization' e retorna o payload do token.
- */
 export async function getAuthSession(request: Request) {
   const authHeader = request.headers.get("authorization");
 

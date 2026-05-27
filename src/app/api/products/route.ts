@@ -3,14 +3,12 @@ import prisma from "@/lib/prisma";
 import { getAuthSession } from "@/lib/auth";
 import { z } from "zod";
 
-// Validação para criação de produto
 const productSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório"),
   description: z.string().optional(),
   price: z.number().min(0, "Preço deve ser positivo"),
 });
 
-// GET: Listar todos os produtos do usuário logado
 export async function GET(request: Request) {
   const session = await getAuthSession(request);
 
@@ -30,7 +28,6 @@ export async function GET(request: Request) {
   }
 }
 
-// POST: Criar um novo produto para o usuário logado
 export async function POST(request: Request) {
   const session = await getAuthSession(request);
 

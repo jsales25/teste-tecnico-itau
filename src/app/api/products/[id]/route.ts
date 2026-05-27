@@ -9,7 +9,6 @@ const updateProductSchema = z.object({
   price: z.number().min(0, "Preço deve ser positivo").optional(),
 });
 
-// PATCH: Atualizar um produto
 export async function PATCH(
   request: Request,
   { params }: { params: { id: string } }
@@ -20,11 +19,10 @@ export async function PATCH(
   }
 
   try {
-    const { id } = await (params as any); // Next.js 15+ requer await no params em alguns contextos
+    const { id } = await (params as any);
     const body = await request.json();
     const data = updateProductSchema.parse(body);
 
-    // 1. Verificamos se o produto existe e pertence ao usuário
     const product = await prisma.product.findFirst({
       where: {
         id: id,
@@ -39,7 +37,6 @@ export async function PATCH(
       );
     }
 
-    // 2. Atualizamos o produto
     const updatedProduct = await prisma.product.update({
       where: { id: id },
       data: data,
@@ -54,7 +51,6 @@ export async function PATCH(
   }
 }
 
-// DELETE: Deletar um produto
 export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }
@@ -67,7 +63,6 @@ export async function DELETE(
   try {
     const { id } = await (params as any);
 
-    // Verificamos se o produto pertence ao usuário antes de deletar
     const product = await prisma.product.findFirst({
       where: {
         id: id,
