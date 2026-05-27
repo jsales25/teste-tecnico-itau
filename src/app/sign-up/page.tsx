@@ -142,6 +142,13 @@ export default function SignUp() {
               )}
             </label>
 
+            <p className="text-sm">
+            Já tem uma conta?{" "}
+            <Link href="/sign-in" className="text-blue-900 font-semibold underline">
+              Faça login
+            </Link>
+          </p>
+
             <button
               type="submit"
               disabled={!isValid || isSubmitting}
@@ -151,12 +158,6 @@ export default function SignUp() {
             </button>
           </form>
 
-          <p className="text-sm">
-            Já tem uma conta?{" "}
-            <Link href="/sign-in" className="text-blue-900 font-semibold underline">
-              Faça login
-            </Link>
-          </p>
         </div>
 
         <footer className="text-sm text-gray-500 mt-auto">
